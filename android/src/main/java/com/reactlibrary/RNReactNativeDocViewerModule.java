@@ -64,12 +64,13 @@ public class RNReactNativeDocViewerModule extends ReactContextBaseJavaModule {
   public void openDoc(ReadableArray args, Callback callback) {
       final ReadableMap arg_object = args.getMap(0);
       try {
-        if (arg_object.getString("url") != null && arg_object.getString("fileName") != null) {
+        if (arg_object.getString("url") != null && arg_object.getString("fileName") != null && arg_object.getString("fileExtension") != null) {
             // parameter parsing
             final String url = arg_object.getString("url");
             final String fileName =arg_object.getString("fileName");
+            final String fileExtension =arg_object.getString("fileExtension");
             // Begin the Download Task
-            new FileDownloaderAsyncTask(callback, url, fileName).execute();
+            new FileDownloaderAsyncTask(callback, url, fileName, fileExtension).execute();
         }else{
             callback.invoke(false);
         }
@@ -174,10 +175,9 @@ public class RNReactNativeDocViewerModule extends ReactContextBaseJavaModule {
      * @param url
      * @return
      */
-    private static String getMimeType(String url) {
+    private static String getMimeType(String extension) {
         String mimeType = null;
 
-        String extension = MimeTypeMap.getFileExtensionFromUrl(Uri.encode(url));
         if (extension != null) {
             MimeTypeMap mime = MimeTypeMap.getSingleton();
             mimeType = mime.getMimeTypeFromExtension(extension);
@@ -199,11 +199,12 @@ public class RNReactNativeDocViewerModule extends ReactContextBaseJavaModule {
         private final String fileName;
 
         public FileDownloaderAsyncTask(Callback callback,
-                String url, String fileName) {
+                String url, String fileName, String extension) {
             super();
             this.callback = callback;
             this.url = url;
             this.fileName = fileName;
+            this.extension = extension;
         }
 
         @Override
@@ -226,7 +227,7 @@ public class RNReactNativeDocViewerModule extends ReactContextBaseJavaModule {
             Context context = getCurrentActivity();
 
             // mime type of file data
-            String mimeType = getMimeType(url);
+            String mimeType = getMimeType(extension);
             if (mimeType == null || context == null) {
                 return;
             }
