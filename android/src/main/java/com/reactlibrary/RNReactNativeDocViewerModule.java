@@ -197,6 +197,7 @@ public class RNReactNativeDocViewerModule extends ReactContextBaseJavaModule {
         private final Callback callback;
         private final String url;
         private final String fileName;
+        private final String extension;
 
         public FileDownloaderAsyncTask(Callback callback,
                 String url, String fileName, String extension) {
