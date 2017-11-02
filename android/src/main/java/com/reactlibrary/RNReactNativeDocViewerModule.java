@@ -107,7 +107,7 @@ public class RNReactNativeDocViewerModule extends ReactContextBaseJavaModule {
      * @param url
      * @return
      */
-    private File downloadFile(String url, String, extension, Callback callback) {
+    private File downloadFile(String url, String extension, Callback callback) {
 
         try {
             // get an instance of a cookie manager since it has access to our
