@@ -107,7 +107,7 @@ public class RNReactNativeDocViewerModule extends ReactContextBaseJavaModule {
      * @param url
      * @return
      */
-    private File downloadFile(String url, Callback callback) {
+    private File downloadFile(String url, String, extension, Callback callback) {
 
         try {
             // get an instance of a cookie manager since it has access to our
@@ -127,12 +127,6 @@ public class RNReactNativeDocViewerModule extends ReactContextBaseJavaModule {
             }
 
             InputStream reader = conn.getInputStream();
-
-            String extension = MimeTypeMap.getFileExtensionFromUrl(url);
-            if (extension.equals("")) {
-                extension = "pdf";
-                System.out.println("extension (default): " + extension);
-            }
 
             Context context = getReactApplicationContext().getBaseContext();
             File outputDir = context.getCacheDir();
@@ -211,7 +205,7 @@ public class RNReactNativeDocViewerModule extends ReactContextBaseJavaModule {
         @Override
         protected File doInBackground(Void... arg0) {
             if (!url.startsWith("file://")) {
-                return downloadFile(url, callback);
+                return downloadFile(url, extension, callback);
             } else {
                 File file = new File(url.replace("file://", ""));
                 return file;
